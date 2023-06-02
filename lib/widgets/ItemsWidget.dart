@@ -3,6 +3,11 @@ import 'package:flutter/material.dart';
 class ItemsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final double screenHeight = MediaQuery.of(context).size.height;
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final bool isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
+
     return GridView.count(
       childAspectRatio: 0.68,
       physics: NeverScrollableScrollPhysics(),
@@ -10,7 +15,8 @@ class ItemsWidget extends StatelessWidget {
       shrinkWrap: true,
       children: [
         for (int i = 1; i < 8; i++)
-          Expanded(
+          AspectRatio(
+            aspectRatio: 1.0, // Maintain square aspect ratio
             child: Container(
               padding: EdgeInsets.only(left: 15, right: 15, top: 10),
               margin: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
@@ -19,6 +25,7 @@ class ItemsWidget extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -44,52 +51,62 @@ class ItemsWidget extends StatelessWidget {
                       ),
                     ],
                   ),
-                  InkWell(
-                    onTap: () {},
-                    child: Container(
-                      margin: EdgeInsets.all(10),
-                      child: Image.asset(
-                        "images/$i.png",
-                        height: 120,
-                        width: 120,
-                      ),
-                    ),
-                  ),
+                  SizedBox(
+                      height: isLandscape
+                          ? 5
+                          : 10), // Adjusted gap in landscape mode
                   Expanded(
-                    child: Container(
-                      padding: EdgeInsets.only(bottom: 8),
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        "Product Title",
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Color(0xFF4C53A5),
-                          fontWeight: FontWeight.bold,
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.pushNamed(context, 'itemPage');
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        child: Image.asset(
+                          "images/$i.png",
+                          fit: BoxFit.contain,
+                          width: screenWidth * 0.3, // Responsive width
                         ),
                       ),
                     ),
                   ),
-                  Expanded(
-                    child: Container(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        "Write description of product",
-                        style: TextStyle(
-                          fontSize: 15,
-                          color: Color(0xFF4C53A5),
-                        ),
+                  SizedBox(
+                      height: isLandscape
+                          ? 5
+                          : 10), // Adjusted gap in landscape mode
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "Product Title",
+                      style: TextStyle(
+                        fontSize: screenHeight * 0.025, // Responsive font size
+                        color: Color(0xFF4C53A5),
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
+                  SizedBox(height: 5),
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "Write description of product",
+                      style: TextStyle(
+                        fontSize: screenHeight * 0.02, // Responsive font size
+                        color: Color(0xFF4C53A5),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 10),
                   Padding(
-                    padding: EdgeInsets.symmetric(vertical: 10),
+                    padding: const EdgeInsets.only(bottom: 8.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
                           "\$55",
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize:
+                                screenHeight * 0.025, // Responsive font size
                             fontWeight: FontWeight.bold,
                             color: Color(0xFF4C53A5),
                           ),
